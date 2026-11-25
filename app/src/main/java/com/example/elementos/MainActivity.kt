@@ -19,7 +19,9 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             ElementosTheme {
-                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
+                Scaffold(modifier =
+                    Modifier.fillMaxSize())
+                    { innerPadding ->
                     ContendoElementos(innerPadding)
 
                 }

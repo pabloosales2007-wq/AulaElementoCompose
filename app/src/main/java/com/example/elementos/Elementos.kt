@@ -43,10 +43,53 @@ import com.example.elementos.ui.theme.ElementosTheme
 import com.example.elementos.ui.theme.Titulo
 import com.example.elementos.ui.theme.semFoco
 import android.icu.util.Calendar
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.material.icons.filled.DateRange
+import androidx.compose.material.icons.filled.LocationOn
+import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.DropdownMenuItem
+import androidx.compose.ui.draw.blur
+import androidx.compose.ui.graphics.Color
 
+@Composable
+fun comboBox(
+    opcoes : List<String>,
+    opcaoSelecionada : String,
+    selecionada : (String) -> Unit,
+    rotulo: String
+) {
+    var expandido by remember { mutableStateOf(false) }
+    Box(modifier = Modifier.fillMaxWidth()){
+        OutlinedTextField(
+            value = opcaoSelecionada,
+            onValueChange = {},
+            label = {Text(rotulo)},
+            readOnly = true,
+            modifier = Modifier.fillMaxWidth(),
+            trailingIcon = {Icon(Icons.Default.LocationOn, rotulo, tint = Titulo) }
+        )
+        Box(modifier = Modifier.matchParentSize() // vai herdar as configurações e tamanhos do pai
+            .clickable{expandido = true}
+            .background(Color.Transparent)
+        )
+        DropdownMenu(expanded = expandido, onDismissRequest = {expandido = false},
+            modifier = Modifier.fillMaxWidth(0.92F)) {
+            opcoes.forEach { opcao ->
+                DropdownMenuItem(
+                    text = {Text(opcao)},
+                    onClick =
+                        {selecionada(opcao)
+                    expandido = false // Quando voce toca no elemento
+                    }
+
+                )
+            }
+        }
+    }
+
+}
 
 /**
  * Campo de seleção de data
@@ -245,6 +288,16 @@ fun ContendoElementos(valorDeEspacamentoInicial: PaddingValues) {
             Icons.Default.Info
 
         )
+
+        var opcaoSelecionada by remember { mutableStateOf("") }
+
+        comboBox(
+            listOf("Biblioteca Lapa", "Biblioteca Osasco", "Biblioteca Morumbi"),
+            opcaoSelecionada,
+            {opcaoSelecionada = it},
+            "Seleciona a biblioteca que vai alocar"
+
+            )
 
 
 
